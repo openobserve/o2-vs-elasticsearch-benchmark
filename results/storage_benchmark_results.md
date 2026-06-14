@@ -241,15 +241,4 @@ Ratio: $12.48 / $0.092 = 135x ≈ 140x ✅
 
 > OpenObserve ingested **33% more data** in the same time period on **half the CPU** of Elasticsearch. If both were on identical hardware, the ingestion speed gap would be even larger.
 
----
 
-## 8. Next Steps
-
-1. **Query performance benchmarking** — run 20 query types (filter, aggregation, full-text, combined, heavy) on both systems with equal data volume and measure p50, p95, p99 latency
-2. **Clean reingest** — fix field mapping issue and reingest equal doc counts to both systems for a fair query comparison
-3. **Cost comparison** — calculate full cost difference including EBS vs S3 and replication factors to reproduce the 140x cost claim
-4. **r7gd optimization** — test OpenObserve specifically on ARM NVMe to show additional hardware optimization benefit
-
----
-
-> **Note:** ES storage numbers are pre-forcemerge (still at 120 segments). After forcemerge completes, ES storage will reduce further but the compression ratio advantage for OpenObserve will remain significant.
