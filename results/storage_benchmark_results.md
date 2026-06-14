@@ -48,19 +48,7 @@ OpenObserve accepted all documents without any configuration changes.
 
 > **This is a critical real-world finding:** Production K8s logs often have inconsistent schemas. ES requires manual schema management to handle this. O2 handles it out of the box.
 
-### 3.3 Compression Ratio — Variation Across Ingestion Runs
-
-> **Important Disclaimer:** Compression ratios are highly dependent on data entropy. Results will vary based on how repetitive the data is. The table below shows how compression improved as the data generator was refined to better match real K8s log structure.
-
-| Run | Data Type | O2 Compression | ES Compression | Notes |
-|---|---|---|---|---|
-| Run 1 (synthetic flog) | Apache web logs via Docker | 7.6x | 1.3x | Docker wrapper with unique `container_id` hurt compression |
-| Run 2 (K8s style) | K8s structured logs with UUIDs | 9.5x | 1.14x | UUID fields like `docker_id` reduced compression |
-| Run 3 (refined K8s) | K8s logs without high-entropy fields | **15.9x** | 2.3x | Removing unique hash fields dramatically improved compression |
-
-> The 15.9x compression in Run 3 **exceeds the claimed 13x** — validating that with proper real-world K8s log structure, OpenObserve's compression advantage is significant and consistent.
-
-### 3.4 Compression Ratio Progression
+### 3.3 Compression Ratio Progression
 
 | Raw Data Accepted | ES Stored | O2 Stored | ES Ratio | O2 Ratio |
 |---|---|---|---|---|
