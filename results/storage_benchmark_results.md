@@ -90,16 +90,16 @@ OpenObserve accepted all documents without any configuration changes.
 
 ## 4. Compression Ratio Disclaimer
 
-> **Important:** The 28.5x compression ratio observed for OpenObserve is influenced by several characteristics of the synthetic test data that may not reflect real production environments:
+> **Important:** The 9.5x compression ratio observed for OpenObserve is influenced by characteristics of the synthetic test data that may not reflect all real production environments:
 >
-> - **Low field cardinality** — Only 6 unique namespaces, 5 containers, 50 hosts, and 10 unique log messages. Real K8s logs have hundreds of unique pod names and varied log content.
-> - **Fixed random seed (42)** — Same values repeat in the same sequence across all generators, making columnar compression extremely effective.
-> - **Large compaction files** — `ZO_COMPACT_MAX_FILE_SIZE=5120` (5GB) allows more data per Parquet file, improving column compression significantly.
+> - **Moderate field cardinality** — 20 namespaces, 30 containers, 200 hosts, and 10 roles. These are fixed-size pools, so the same values recur across records — more repetitive than production logs where pod names and hosts grow continuously.
+> - **Unique log messages per record** — The generator uses 20 log templates (request IDs, durations, IPs, paths, etc.) with random placeholders filled on every record, so `log` values are not repeated strings. The cardinality of the `log` field is effectively unbounded. See [`generator/k8s_gen.py`](../generator/k8s_gen.py) for the exact templates used.
+> - **Fixed random seed (42)** — Placeholder values are drawn from the same pseudo-random sequence across all generator instances, so the value distribution is deterministic and slightly more compressible than true production randomness.
 >
 > **Expected compression on real production K8s logs:**
 > | Data Type | O2 Compression | ES Compression |
 > |---|---|---|
-> | Our synthetic data | 28.5x | 3x |
+> | Our synthetic data (this benchmark) | 9.5x | 1.14x |
 > | Real K8s logs (Fluent Bit) | 13-15x | 3-4x |
 > | Real app logs (varied) | 8-12x | 2-3x |
 >
